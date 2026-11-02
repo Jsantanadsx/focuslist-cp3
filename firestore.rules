@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Somente o próprio usuário pode acessar as tarefas sob seu UID.
+    match /users/{userId}/tasks/{taskId} {
+      function dono() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      allow read: if dono();
+
+      // Só cria tarefas com os quatro campos esperados e tipos corretos.
+      allow create: if dono()
+        && request.resource.data.keys().hasAll(['title', 'completed', 'createdAt', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['title', 'completed', 'createdAt', 'updatedAt'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.completed == false
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp;
+
+      // Este app não edita títulos. Só altera a conclusão e a data de atualização.
+      allow update: if dono()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['completed', 'updatedAt'])
+        && request.resource.data.completed is bool
+        && request.resource.data.updatedAt is timestamp;
+
+      allow delete: if dono();
+    }
+  }
+}
