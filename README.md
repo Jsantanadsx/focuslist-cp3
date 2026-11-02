@@ -178,7 +178,7 @@ focuslist-cp3/
 ├── firestore.rules                # Segurança do banco de dados
 ├── package.json                   # Dependências e comandos
 ├── README.md                      # Proposta e conceitos (itens 1 e 3)
-├── GUIA-PARA-INICIANTES.md        # Tutorial e explicações simples
+├── GUIA.md        # Tutorial e explicações simples
 ├── CHECKLIST-ENTREGA.md           # Lista final para o Teams
 ├── tests/
 │   └── validation.test.mjs        # Testes automáticos das validações

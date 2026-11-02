@@ -17,8 +17,6 @@ const mensagens = {
 export function mensagemDeErro(error) {
   const code = String(error?.code ?? '');
 
-  console.error('Erro Firebase:', code, error?.message);
-
   return mensagens[code] ??
-    `Erro na operação. Código: ${code || 'desconhecido'}`;
+    'Não foi possível concluir a operação. Tente novamente.';
 }
